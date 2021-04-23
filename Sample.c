@@ -65,6 +65,8 @@ void getMousePosition(char *command) {
 
 	short haveSetX = 0;
 	int xMark = 0;
+	int xPosCounter = 0;
+	int yPosCounter = 0;
 	strcpy(xPlaceHolder, "    ");
 	strcpy(yPlaceHolder, "    ");
 
@@ -79,14 +81,16 @@ void getMousePosition(char *command) {
 
 				haveSetX = 1;
 			}
+
+			continue;
 		}
 
 		if (!haveSetX) {
 
-			xPlaceHolder[5 - i - 1] = command[i];
+			xPlaceHolder[xPosCounter++] = command[i];
 		} else {
 
-			xPlaceHolder[5 - i - xMark - 1] = command[i];
+			yPlaceHolder[yPosCounter++] = command[i];
 		}
 	}
 
@@ -191,7 +195,7 @@ void EventLoop(struct nk_context *ctx) {
 
 	char command[255];
 
-	strcpy(command, "MX ");
+	// strcpy(command, "MX ");
 
 	do {
 
@@ -207,7 +211,7 @@ void EventLoop(struct nk_context *ctx) {
         	printf("nk_input_begin complete");
         #endif
 
-		// scanf("%s", command);
+		scanf("%s", command);
 		commandType = command[0];
 
 		switch (commandType) {

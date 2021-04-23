@@ -91,7 +91,7 @@ NK_API struct nk_image* nk_commands_only_create_image(const char* file_name) {
 
     if (bitmap == NULL) {
 
-        fprintf(stdout, "Unable to load image file: %s\n", file_name);
+        fprintf(stdout, "Unable to load image file: %s", file_name);
         return NULL;
     }
 
@@ -418,7 +418,7 @@ NK_API void nk_commands_only_render(struct nk_context *ctx) {
                     // MoveTo((int)l->begin.x, (int)l->begin.y);
                     // LineTo((int)l->end.x, (int)l->end.y);
                     char output[255];
-                    sprintf(output, "L%d,%d,%d,%d,%d,%d\n", color, (int)l->line_thickness, (int)l->begin.x, (int)l->begin.y, (int)l->end.x, (int)l->end.y);
+                    sprintf(output, "L%d,%d,%d,%d,%d,%d", color, (int)l->line_thickness, (int)l->begin.x, (int)l->begin.y, (int)l->end.x, (int)l->end.y);
                     puts(output);
                 }
 
@@ -447,7 +447,7 @@ NK_API void nk_commands_only_render(struct nk_context *ctx) {
 
                     // FrameRect(&quickDrawRectangle);//, (int)r->rounding, (int)r->rounding);
                     char output[255];
-                    sprintf(output, "R%d,%d,%d,%d,%d,%d,%d\n", color, (int)r->line_thickness, (int)r->x, (int)r->y, (int)r->y + (int)r->h, (int)r->x + (int)r->w, (int)r->rounding);
+                    sprintf(output, "R%d,%d,%d,%d,%d,%d,%d", color, (int)r->line_thickness, (int)r->x, (int)r->y, (int)r->y + (int)r->h, (int)r->x + (int)r->w, (int)r->rounding);
                     puts(output);
                 }
 
@@ -478,7 +478,7 @@ NK_API void nk_commands_only_render(struct nk_context *ctx) {
                     // FillRect(&quickDrawRectangle, &colorPattern);
                     // FrameRect(&quickDrawRectangle);//, (int)r->rounding, (int)r->rounding); // http://mirror.informatimago.com/next/developer.apple.com/documentation/mac/CommandsOnly/CommandsOnly-105.html#HEADING105-0
                     char output[255];
-                    sprintf(output, "RF%d,%d,%d,%d,%d,%d,%d\n", color, colorPattern, (int)r->x, (int)r->y, (int)r->y + (int)r->h, (int)r->x + (int)r->w, (int)r->rounding);
+                    sprintf(output, "RF%d,%d,%d,%d,%d,%d,%d", color, colorPattern, (int)r->x, (int)r->y, (int)r->y + (int)r->h, (int)r->x + (int)r->w, (int)r->rounding);
                     puts(output);
                 }
 
@@ -503,7 +503,7 @@ NK_API void nk_commands_only_render(struct nk_context *ctx) {
 
                     // FrameOval(&quickDrawRectangle); // An oval is a circular or elliptical shape defined by the bounding rectangle that encloses it. inside macintosh: imaging with commands_only 3-25
                     char output[255];
-                    sprintf(output, "C%d,%d,%d,%d,%d\n", color, (int)c->x, (int)c->y, (int)c->y + (int)c->h, (int)c->x + (int)c->w);
+                    sprintf(output, "C%d,%d,%d,%d,%d", color, (int)c->x, (int)c->y, (int)c->y + (int)c->h, (int)c->x + (int)c->w);
                     puts(output);
                 }
 
@@ -533,7 +533,7 @@ NK_API void nk_commands_only_render(struct nk_context *ctx) {
                     // FrameOval(&quickDrawRectangle);// An oval is a circular or elliptical shape defined by the bounding rectangle that encloses it. inside macintosh: imaging with commands_only 3-25
                     // http://mirror.informatimago.com/next/developer.apple.com/documentation/mac/CommandsOnly/CommandsOnly-111.html#HEADING111-0
                     char output[255];
-                    sprintf(output, "CF%d,%d,%d,%d,%d,%d\n", color, colorPattern, (int)c->x, (int)c->y, (int)c->y + (int)c->h, (int)c->x + (int)c->w);
+                    sprintf(output, "CF%d,%d,%d,%d,%d,%d", color, colorPattern, (int)c->x, (int)c->y, (int)c->y + (int)c->h, (int)c->x + (int)c->w);
                     puts(output);
                 }
 
@@ -556,7 +556,7 @@ NK_API void nk_commands_only_render(struct nk_context *ctx) {
                     // LineTo((int)t->c.x, (int)t->c.y);
                     // LineTo((int)t->a.x, (int)t->a.y);
                     char output[255];
-                    sprintf(output, "T%d,%d,%d,%d,%d,%d,%d,%d\n", color, (int)t->line_thickness, (int)t->a.x, (int)t->a.y, (int)t->b.x, (int)t->b.y, (int)t->c.x, (int)t->c.y);
+                    sprintf(output, "T%d,%d,%d,%d,%d,%d,%d,%d", color, (int)t->line_thickness, (int)t->a.x, (int)t->a.y, (int)t->b.x, (int)t->b.y, (int)t->c.x, (int)t->c.y);
                     puts(output);
                 }
 
@@ -585,7 +585,7 @@ NK_API void nk_commands_only_render(struct nk_context *ctx) {
                     // FillPoly(trianglePolygon, &colorPattern);
                     // KillPoly(trianglePolygon);
                     char output[255];
-                    sprintf(output, "TF%d,%d,%d,%d,%d,%d,%d,%d\n", color, colorPattern, (int)t->a.x, (int)t->a.y, (int)t->b.x, (int)t->b.y, (int)t->c.x, (int)t->c.y);
+                    sprintf(output, "TF%d,%d,%d,%d,%d,%d,%d,%d", color, colorPattern, (int)t->a.x, (int)t->a.y, (int)t->b.x, (int)t->b.y, (int)t->c.x, (int)t->c.y);
                     puts(output);
                 }
 
@@ -708,7 +708,7 @@ NK_API void nk_commands_only_render(struct nk_context *ctx) {
 
                     // DrawText((const char*)t->string, 0, (int)t->length);
                     char output[255];
-                    sprintf(output, "S%d,%d,%d,%d,%d,%s\n", color, (int)t->height, (int)t->x, (int)t->y, (int)t->length, (char*)t->string);
+                    sprintf(output, "S%d,%d,%d,%d,%d,%s", color, (int)t->height, (int)t->x, (int)t->y, (int)t->length, (char*)t->string);
                     puts(output);
                 }
 
@@ -771,7 +771,7 @@ NK_API void nk_commands_only_render(struct nk_context *ctx) {
                     // easy to modify for standard bitmap files (just need to know how many bytes represent each pixel and iterate from there):
                     // 
                     // for (int i = 0; i < strlen(string); i++) {
-                    //     printf("\nchar: %c", string[i]);
+                    //     printf("char: %c", string[i]);
                     //     char pixel[1];
                     //     memcpy(pixel, &string[i], 1);
                     //     if (strcmp(pixel, "0") == 0) { // white pixel
