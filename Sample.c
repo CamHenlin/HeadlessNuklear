@@ -11,13 +11,24 @@
 #define NK_IMPLEMENTATION
 #define NK_QUICKDRAW_IMPLEMENTATION
 
+#define RUNNING_UNDER_EMSCRIPTEN
+#ifdef RUNNING_UNDER_EMSCRIPTEN
+
+#include <emscripten.h>
+
+#endif
+
 #include <string.h>
 #include "nuklear.h"
 #include "nuklear_commands_only.h"
 
+char command[255];
+
+struct nk_context *ctx;
+
 // #define EMSCRIPTEN_NUKLEAR_DEBUGGING
 
-void EventLoop(struct nk_context *ctx);
+void EventLoop();
 void DoEvent(char *event, struct nk_context *ctx);
 void Initialize(void);
 
@@ -35,9 +46,25 @@ static void boxTest(struct nk_context *ctx) {
 	}
 }
 
-int main() {
+#ifdef RUNNING_UNDER_EMSCRIPTEN
 
-    struct nk_context *ctx;
+EM_JS(void, flushCommandList, (), {
+
+  global.flushCommandList();
+
+  return;
+});
+
+void handleString(char* input) {
+
+	printf("HANDLE STRING CALLED!");
+
+	memcpy(command, input, strlen(input));
+}
+
+#endif
+
+int main() {
 
     #ifdef EMSCRIPTEN_NUKLEAR_DEBUGGING
     
@@ -51,7 +78,19 @@ int main() {
 	    printf("call into event loop");
 	#endif
 
-	EventLoop(ctx);
+
+	#ifdef RUNNING_UNDER_EMSCRIPTEN
+
+	    emscripten_set_main_loop(EventLoop, 0, 0);
+
+	#else
+
+	    while (1) {
+
+			EventLoop();
+		}
+
+	#endif
 }
 
 int x;
@@ -191,92 +230,120 @@ void handleKey (struct nk_context *ctx, char *charKey, char *modifierKey) {
 	}
 }
 
-void EventLoop(struct nk_context *ctx) {
+EM_JS(const char*, return_str, (void), {
 
-	char command[255];
+  var jsString = global.test;
+  var lengthBytes = jsString.length+1;
+  var stringOnWasmHeap = _malloc(lengthBytes);
+  stringToUTF8(jsString, stringOnWasmHeap, lengthBytes);
 
-	// strcpy(command, "MX ");
-
-	do {
-
-		#ifdef EMSCRIPTEN_NUKLEAR_DEBUGGING
-
-	        printf("nk_input_begin");
-	    #endif
-
-		nk_input_begin(ctx);
-
-        #ifdef EMSCRIPTEN_NUKLEAR_DEBUGGING
-
-        	printf("nk_input_begin complete");
-        #endif
-
-		scanf("%s", command);
-		commandType = command[0];
-
-		switch (commandType) {
-
-			case 'M':
-
-				getMousePosition(command);
-
-				nk_input_motion(ctx, x, y);
-
-			break;
-
-			case 'D':
-
-				getMousePosition(command);
-
-				nk_input_button(ctx, NK_BUTTON_LEFT, x, y, 1); // MOUSE DOWN
-
-			break;
-
-			case 'U':
-
-				getMousePosition(command);
-
-				nk_input_button(ctx, NK_BUTTON_LEFT, x, y, 0); // MOUSE UP
-
-			break;
-
-			case 'K':
-
-				handleKey(ctx, &command[1], &command[2]); // KEY HANDLING
-
-			break;
-		}
-
-		#ifdef EMSCRIPTEN_NUKLEAR_DEBUGGING
-
-        	printf("nk_input_end");
-        #endif
-
-    	nk_input_end(ctx);
-
-        #ifdef EMSCRIPTEN_NUKLEAR_DEBUGGING
-        	
-        	printf("nk_input_end complete");
-        #endif
+  global.test = "";
+  return stringOnWasmHeap;
+});
 
 
-        #ifdef EMSCRIPTEN_NUKLEAR_DEBUGGING
 
-	        printf("nk_quickdraw_render");
-	    #endif
 
-    	boxTest(ctx);
+void EventLoop() {
 
-    	// this should dump all the drawing commands to standard output
-    	nk_commands_only_render(ctx);
+	#ifdef RUNNING_UNDER_EMSCRIPTEN
 
-		nk_clear(ctx);
+		flushCommandList();
 
-    	#ifdef EMSCRIPTEN_NUKLEAR_DEBUGGING
+	#endif
 
-        	printf("nk_input_render complete");
-        #endif
-	} while (1);
+	memset(command, 0, 255);
+
+	#ifdef EMSCRIPTEN_NUKLEAR_DEBUGGING
+
+        printf("nk_input_begin");
+    #endif
+
+	nk_input_begin(ctx);
+
+    #ifdef EMSCRIPTEN_NUKLEAR_DEBUGGING
+
+    	printf("nk_input_begin complete");
+    #endif
+
+    #ifdef RUNNING_UNDER_EMSCRIPTEN
+
+	const char* str = return_str();
+	memcpy(command, str, strlen(str));
+	free(str);
+
+    #else
+
+    scanf("%s", command);
+
+    #endif 
+	
+	commandType = command[0];
+
+	switch (commandType) {
+
+		case 'M':
+
+			getMousePosition(command);
+
+			nk_input_motion(ctx, x, y);
+
+		break;
+
+		case 'D':
+
+			getMousePosition(command);
+
+			nk_input_button(ctx, NK_BUTTON_LEFT, x, y, 1); // MOUSE DOWN
+
+		break;
+
+		case 'U':
+
+			getMousePosition(command);
+
+			nk_input_button(ctx, NK_BUTTON_LEFT, x, y, 0); // MOUSE UP
+
+		break;
+
+		case 'K':
+
+			handleKey(ctx, &command[1], &command[2]); // KEY HANDLING
+
+		break;
+	}
+
+	#ifdef EMSCRIPTEN_NUKLEAR_DEBUGGING
+
+    	printf("nk_input_end");
+    #endif
+
+    memset(command, 0, sizeof command);
+
+	nk_input_end(ctx);
+
+    #ifdef EMSCRIPTEN_NUKLEAR_DEBUGGING
+    	
+    	printf("nk_input_end complete");
+    #endif
+
+
+    #ifdef EMSCRIPTEN_NUKLEAR_DEBUGGING
+
+        printf("nk_quickdraw_render");
+    #endif
+
+	boxTest(ctx);
+
+	// this should dump all the drawing commands to standard output
+	nk_commands_only_render(ctx);
+
+	nk_clear(ctx);
+
+	#ifdef EMSCRIPTEN_NUKLEAR_DEBUGGING
+
+    	printf("nk_input_render complete");
+    #endif
 }
 
 int mouseMove = 0;
