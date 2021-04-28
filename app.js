@@ -1,51 +1,73 @@
 'use strict';
 
+const test = require('./sample.js')
+
+// these are shared values that we use in C code
 global.test = ``;
 global.returnValue = `initial`;
 
 let commandList = []
+let commandCache = {}
+let commandCacheCounter = 0
+let commandCallbackFunction = () => {} // placeholder, should never be called
 
+// called from C code
 global.storeCommandOnCommandList = (command) => {
 
-	// TODO: we could add some command validation here
-	console.log(`storeCommandOnCommandList: ${command}`)
 	commandList.push(command)
 }
 
-global.flushCommandList = () => {
-	console.log(`flushCommandList`)
+const updateCommandCacheAndUpdateCommandListToCachedValues = () => {
+
+	commandList = commandList.map((command) => {
+
+		if (commandCache[command]) {
+
+			return commandCache[command]
+		}
+
+		commandCache[command] = commandCacheCounter++
+
+		return command
+	})
+}
+
+// called from C code
+global.flushCommandList = async () => {
+
+	if (commandList.length === 0) {
+
+		return
+	}
+
+	updateCommandCacheAndUpdateCommandListToCachedValues()
+
+	if (commandCallbackFunction) {
+
+		commandCallbackFunction()
+	}
+
 	commandList = []
 }
 
-setTimeout(() => {
-	console.log(`returnvalue is currently:`)
-	console.log(commandList)
-	global.returnValue = ``;
-	global.test = 'M100,100'
-}, 1000)
-setTimeout(() => {
-	console.log(`returnvalue is currently:`)
-	console.log(commandList)
-	global.returnValue = ``;
-	global.test = 'D100,100'
-}, 2000)
-setTimeout(() => {
-	console.log(`returnvalue is currently:`)
-	console.log(commandList)
-	global.returnValue = ``;
-	global.test = 'KX '
-}, 3000)
-setTimeout(() => {
-	console.log(`returnvalue is currently:`)
-	console.log(commandList)
-	global.returnValue = ``;
-	global.test = 'KX '
-}, 4000)
-setTimeout(() => {
-	console.log(`returnvalue is currently:`)
-	console.log(commandList)
-	global.returnValue = ``;
-	global.test = 'KX '
-}, 5000)
-const test = require('./sample.js')
+class Nuklear {
 
+  static async runEvent (event) {
+
+  	console.log(`runEvent: ${event}`)
+
+  	global.test = event
+
+  	return await new Promise((resolve) => {
+
+  		commandCallbackFunction = () => {
+
+  			resolve(commandList)
+  		}
+
+  		test._EventLoop()
+  	})
+  }
+}
+
+module.exports = Nuklear

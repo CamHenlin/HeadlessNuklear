@@ -1,5 +1,3 @@
-
-
 #define WINDOW_WIDTH 510
 #define WINDOW_HEIGHT 302
 
@@ -62,6 +60,11 @@ void handleString(char* input) {
 	memcpy(command, input, strlen(input));
 }
 
+void noop() {
+
+	return;
+}
+
 #endif
 
 int main() {
@@ -81,7 +84,7 @@ int main() {
 
 	#ifdef RUNNING_UNDER_EMSCRIPTEN
 
-	    emscripten_set_main_loop(EventLoop, 0, 0);
+	    emscripten_set_main_loop(noop, 0, 0);
 
 	#else
 
@@ -241,16 +244,7 @@ EM_JS(const char*, return_str, (void), {
   return stringOnWasmHeap;
 });
 
-
-
-
 void EventLoop() {
-
-	#ifdef RUNNING_UNDER_EMSCRIPTEN
-
-		flushCommandList();
-
-	#endif
 
 	memset(command, 0, 255);
 
@@ -344,6 +338,12 @@ void EventLoop() {
 
     	printf("nk_input_render complete");
     #endif
+
+	#ifdef RUNNING_UNDER_EMSCRIPTEN
+
+		flushCommandList();
+
+	#endif
 }
 
 int mouseMove = 0;
