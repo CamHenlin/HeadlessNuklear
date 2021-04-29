@@ -429,7 +429,7 @@ NK_API void nk_commands_only_render(struct nk_context *ctx) {
                     // MoveTo((int)l->begin.x, (int)l->begin.y);
                     // LineTo((int)l->end.x, (int)l->end.y);
                     char output[255];
-                    sprintf(output, "L%d,%d,%d,%d,%d,%d", color, (int)l->line_thickness, (int)l->begin.x, (int)l->begin.y, (int)l->end.x, (int)l->end.y);
+                    sprintf(output, "L%01d%01d%04d%04d%04d%04d", color, (int)l->line_thickness, (int)l->begin.x, (int)l->begin.y, (int)l->end.x, (int)l->end.y);
 
                     #ifdef RUNNING_UNDER_EMSCRIPTEN
 
@@ -467,7 +467,7 @@ NK_API void nk_commands_only_render(struct nk_context *ctx) {
 
                     // FrameRect(&quickDrawRectangle);//, (int)r->rounding, (int)r->rounding);
                     char output[255];
-                    sprintf(output, "R%d,%d,%d,%d,%d,%d,%d", color, (int)r->line_thickness, (int)r->x, (int)r->y, (int)r->y + (int)r->h, (int)r->x + (int)r->w, (int)r->rounding);
+                    sprintf(output, "R%01d%01d%04d%04d%04d%04d%04d", color, (int)r->line_thickness, (int)r->x, (int)r->y, (int)r->y + (int)r->h, (int)r->x + (int)r->w, (int)r->rounding);
 
                     #ifdef RUNNING_UNDER_EMSCRIPTEN
 
@@ -507,7 +507,7 @@ NK_API void nk_commands_only_render(struct nk_context *ctx) {
                     // FillRect(&quickDrawRectangle, &colorPattern);
                     // FrameRect(&quickDrawRectangle);//, (int)r->rounding, (int)r->rounding); // http://mirror.informatimago.com/next/developer.apple.com/documentation/mac/CommandsOnly/CommandsOnly-105.html#HEADING105-0
                     char output[255];
-                    sprintf(output, "RF%d,%d,%d,%d,%d,%d,%d", color, colorPattern, (int)r->x, (int)r->y, (int)r->y + (int)r->h, (int)r->x + (int)r->w, (int)r->rounding);
+                    sprintf(output, "Z%01d%01d%04d%04d%04d%04d%04d", color, colorPattern, (int)r->x, (int)r->y, (int)r->y + (int)r->h, (int)r->x + (int)r->w, (int)r->rounding);
 
                     #ifdef RUNNING_UNDER_EMSCRIPTEN
 
@@ -541,7 +541,7 @@ NK_API void nk_commands_only_render(struct nk_context *ctx) {
 
                     // FrameOval(&quickDrawRectangle); // An oval is a circular or elliptical shape defined by the bounding rectangle that encloses it. inside macintosh: imaging with commands_only 3-25
                     char output[255];
-                    sprintf(output, "C%d,%d,%d,%d,%d", color, (int)c->x, (int)c->y, (int)c->y + (int)c->h, (int)c->x + (int)c->w);
+                    sprintf(output, "C%01d%04d%04d%04d%04d", color, (int)c->x, (int)c->y, (int)c->y + (int)c->h, (int)c->x + (int)c->w);
 
                     #ifdef RUNNING_UNDER_EMSCRIPTEN
 
@@ -580,7 +580,7 @@ NK_API void nk_commands_only_render(struct nk_context *ctx) {
                     // FrameOval(&quickDrawRectangle);// An oval is a circular or elliptical shape defined by the bounding rectangle that encloses it. inside macintosh: imaging with commands_only 3-25
                     // http://mirror.informatimago.com/next/developer.apple.com/documentation/mac/CommandsOnly/CommandsOnly-111.html#HEADING111-0
                     char output[255];
-                    sprintf(output, "CF%d,%d,%d,%d,%d,%d", color, colorPattern, (int)c->x, (int)c->y, (int)c->y + (int)c->h, (int)c->x + (int)c->w);
+                    sprintf(output, "X%01d%01d%04d%04d%04d%04d", color, colorPattern, (int)c->x, (int)c->y, (int)c->y + (int)c->h, (int)c->x + (int)c->w);
 
                     #ifdef RUNNING_UNDER_EMSCRIPTEN
 
@@ -612,7 +612,7 @@ NK_API void nk_commands_only_render(struct nk_context *ctx) {
                     // LineTo((int)t->c.x, (int)t->c.y);
                     // LineTo((int)t->a.x, (int)t->a.y);
                     char output[255];
-                    sprintf(output, "T%d,%d,%d,%d,%d,%d,%d,%d", color, (int)t->line_thickness, (int)t->a.x, (int)t->a.y, (int)t->b.x, (int)t->b.y, (int)t->c.x, (int)t->c.y);
+                    sprintf(output, "T%01d%01d%04d%04d%04d%04d%04d%04d", color, (int)t->line_thickness, (int)t->a.x, (int)t->a.y, (int)t->b.x, (int)t->b.y, (int)t->c.x, (int)t->c.y);
 
                     #ifdef RUNNING_UNDER_EMSCRIPTEN
 
@@ -650,7 +650,7 @@ NK_API void nk_commands_only_render(struct nk_context *ctx) {
                     // FillPoly(trianglePolygon, &colorPattern);
                     // KillPoly(trianglePolygon);
                     char output[255];
-                    sprintf(output, "TF%d,%d,%d,%d,%d,%d,%d,%d", color, colorPattern, (int)t->a.x, (int)t->a.y, (int)t->b.x, (int)t->b.y, (int)t->c.x, (int)t->c.y);
+                    sprintf(output, "TF%01d%04d%04d%04d%04d%04d%04d%04d", color, colorPattern, (int)t->a.x, (int)t->a.y, (int)t->b.x, (int)t->b.y, (int)t->c.x, (int)t->c.y);
 
                     #ifdef RUNNING_UNDER_EMSCRIPTEN
 
@@ -771,7 +771,7 @@ NK_API void nk_commands_only_render(struct nk_context *ctx) {
 
                         printf("NK_COMMAND_TEXT");
                         char log[255];
-                        sprintf(log, "%f: %s, %d", (int)t->height, &t->string, (int)t->length);
+                        sprintf(log, "%f: %s, %04d", (int)t->height, &t->string, (int)t->length);
                         writeSerialPort(boutRefNum, log);
                     #endif
 
@@ -782,7 +782,7 @@ NK_API void nk_commands_only_render(struct nk_context *ctx) {
 
                     // DrawText((const char*)t->string, 0, (int)t->length);
                     char output[255];
-                    sprintf(output, "S%d,%d,%d,%d,%d,%s", color, (int)t->height, (int)t->x, (int)t->y, (int)t->length, (char*)t->string);
+                    sprintf(output, "S%01d%04d%04d%04d%04d%s", color, (int)t->height, (int)t->x, (int)t->y, (int)t->length, (char*)t->string);
 
                     #ifdef RUNNING_UNDER_EMSCRIPTEN
 

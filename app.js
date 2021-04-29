@@ -4,7 +4,6 @@ const test = require('./sample.js')
 
 // these are shared values that we use in C code
 global.test = ``;
-global.returnValue = `initial`;
 
 let commandList = []
 let commandCache = {}
@@ -58,7 +57,7 @@ class Nuklear {
 
   	global.test = event
 
-  	return await new Promise((resolve) => {
+  	const output = await new Promise((resolve) => {
 
   		commandCallbackFunction = () => {
 
@@ -67,6 +66,8 @@ class Nuklear {
 
   		test._EventLoop()
   	})
+
+  	return output
   }
 }
 
