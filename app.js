@@ -36,6 +36,11 @@ global.flushCommandList = async () => {
 
 	if (commandList.length === 0) {
 
+		if (commandCallbackFunction) {
+
+			commandCallbackFunction()
+		}
+
 		return
 	}
 
