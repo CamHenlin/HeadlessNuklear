@@ -1,0 +1,19 @@
+{
+  "name": "emscriptennuklear",
+  "version": "1.0.3",
+  "description": "POC of nuklear (https://github.com/Immediate-Mode-UI/Nuklear) compiled via emscripten with some simple interface code. currently has a hardcoded application testing a textbox. won't be especially useful to anyone just yet' ",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/CamHenlin/HeadlessNuklear.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/CamHenlin/HeadlessNuklear/issues"
+  },
+  "homepage": "https://github.com/CamHenlin/HeadlessNuklear#readme"
+}
