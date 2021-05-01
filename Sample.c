@@ -55,8 +55,6 @@ EM_JS(void, flushCommandList, (), {
 
 void handleString(char* input) {
 
-	printf("HANDLE STRING CALLED!");
-
 	memcpy(command, input, strlen(input));
 }
 
@@ -141,7 +139,7 @@ void getMousePosition(char *command) {
 	return;
 }
 
-void handleKey (struct nk_context *ctx, char *charKey, char *modifierKey) {
+void handleKey (struct nk_context *ctx, char charKey, char modifierKey) {
 
 	int key = (int)charKey;
 	int modifierKeyInt = (int)modifierKey;
@@ -302,7 +300,7 @@ void EventLoop() {
 
 		case 'K':
 
-			handleKey(ctx, &command[1], &command[2]); // KEY HANDLING
+			handleKey(ctx, command[1], command[2]); // KEY HANDLING
 
 		break;
 	}
